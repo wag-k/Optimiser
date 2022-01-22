@@ -11,7 +11,7 @@ namespace Optimiser.GeneticAlgorithm
     public abstract class AbstractChromosome<T> : IChromosome<T>
     {
         /// <summary>
-        /// Indexer can be accessible to an each gene.
+        /// Indexer can access to an each gene.
         /// </summary>
         /// <value></value>
         public T this[int locus]{
