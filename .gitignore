@@ -2,3 +2,5 @@ GeneticAlgorithm/obj/*
 GeneticAlgorithm/bin/*
 *.suo
 .vs/*
+GeneticAlgorithmTests/bin/*
+GeneticAlgorithmTests/obj/*

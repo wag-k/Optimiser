@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Algorithm;
+
 namespace Optimiser.GeneticAlgorithm
 {
     /// <summary>
@@ -24,7 +26,10 @@ namespace Optimiser.GeneticAlgorithm
         /// </summary>
         /// <param name="chromosomes"> an ensenble of chromosomes</param>
         /// <returns></returns>
-        public delegate T[] Select(IList<IChromosome<T>> chromosomes);
+        public delegate int[] Select(IList<IChromosome<T>> chromosomes);
+
+        static Random Rand { get; set; }
+
 
         public static Select Create(Selection selection){
             switch (selection)
@@ -37,7 +42,16 @@ namespace Optimiser.GeneticAlgorithm
             }
         }
         
-        public static T[][] SelectByRoulette(IList<IChromosome<T>> chromosomes){
+        static GenesSelectorFactory(){
+            Rand = new Random(DateTime.Now.GetHashCode());
+        }
+
+        /// <summary>
+        /// Select locus pair by roulette
+        /// </summary>
+        /// <param name="chromosomes"></param>
+        /// <returns></returns>
+        public static int[] SelectByRoulette(IList<IChromosome<T>> chromosomes){
             double totalFitness = 0;
             foreach (var chromosome in chromosomes)
             {
@@ -49,7 +63,7 @@ namespace Optimiser.GeneticAlgorithm
             /// </summary>
             double integratedProbability = 0;
             /// <summary>
-            /// if iP[k-1] < rand < iP[k] => select k 
+            /// if iP[k-1] < rand <= iP[k] => select k 
             /// </summary>
             var integratedProbabilities = new double[chromosomes.Count];
             for(int locus = 0; locus < chromosomes.Count; ++locus)
@@ -60,9 +74,20 @@ namespace Optimiser.GeneticAlgorithm
                 integratedProbabilities[locus] = integratedProbability;
             }
 
-            
-            var selectedGenes = new T[2][];
-            return selectedGenes;
+            /// <summary>
+            /// select locus pair randomly
+            /// </summary>
+            /// <returns></returns>
+            var locusSelector1 = Rand.NextDouble();
+            var locus1 = BinarySearch<double>.Search(integratedProbabilities, locusSelector1);
+            var locus2 = locus1;
+            while(locus2 == locus1){
+                var locusSelector2 = Rand.NextDouble();
+                locus2 = BinarySearch<double>.Search(integratedProbabilities, locusSelector2);
+            }
+
+            return new int[2]{locus1, locus2};
         }
+
     }
 }
