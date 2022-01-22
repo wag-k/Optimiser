@@ -36,6 +36,11 @@ namespace Optimiser.GeneticAlgorithm
         public int Length {get{return genes.Length;}}
 
         public double Fitness {get; set;}
+        
+        public AbstractChromosome(T[] genes, double fitness){
+            Genes = genes;
+            Fitness = fitness;
+        }
 
         public abstract T GetAllele(T gene);
     }

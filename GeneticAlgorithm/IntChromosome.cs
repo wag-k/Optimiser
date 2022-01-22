@@ -36,6 +36,14 @@ namespace Optimiser.GeneticAlgorithm
         static int RandCounter {get; set;}
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="genes"></param>
+        /// <param name="fitness"></param>
+        public IntChromosome(int[] genes, double fitness) 
+        : base(genes, fitness){}
+
+        /// <summary>
         /// Get a random value except gene
         /// </summary>
         /// <param name="gene"></param>
