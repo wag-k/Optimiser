@@ -35,6 +35,7 @@ namespace Optimiser.GeneticAlgorithm
             switch (selection)
             {
                 case Selection.Roulette: 
+                    return SelectByRoulette;
                 case Selection.Ranking:
                 case Selection.Tournament: 
                 default:
