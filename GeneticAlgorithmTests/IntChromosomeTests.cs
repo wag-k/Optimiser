@@ -2,6 +2,7 @@
 using Optimiser.GeneticAlgorithm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -23,16 +24,17 @@ namespace Optimiser.GeneticAlgorithm.Tests
             return genes;
         }
 
-        public static IntChromosome CreateSampleIntChrosome(int geneLength, double fitness){
+        public static IChromosome<int> CreateSampleIntChrosome(int geneLength, double fitness){
             var genes = CreateRandomIntGenes(geneLength);
             return new IntChromosome(genes, fitness);
         }
 
-        public static List<IntChromosome> CreateSampleIntChromosomes(int numChromosome){
+        public static List<IChromosome<int>> CreateSampleIntChromosomes(int numChromosome){
             var chromosomes = (
                 from index in Enumerable.Range(0, numChromosome)
                 let geneLength = index + 2 // minGeneLength = 2
-                select CreateSampleIntChrosome(geneLength, index)
+                let fitness = (index+1)*2 // minGeneLength = 2
+                select CreateSampleIntChrosome(geneLength, fitness)
             ).ToList();
             return chromosomes;
         }
