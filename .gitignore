@@ -1,0 +1,4 @@
+GeneticAlgorithm/obj/*
+GeneticAlgorithm/bin/*
+*.suo
+.vs/*
