@@ -28,6 +28,11 @@ namespace Optimiser.GeneticAlgorithm
         /// <value></value>
         int Length {get;}
 
+        /// <summary>
+        /// Chromosome's Fitness
+        /// </summary>
+        /// <value></value>
+        double Fitness {get;}
 
         /// <summary>
         /// Get an allele

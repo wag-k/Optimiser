@@ -7,7 +7,7 @@ namespace Optimiser.GeneticAlgorithm
     /// <summary>
     /// Chromosome of integer
     /// </summary>
-    public class IntChromosome : IChromosome<int>
+    public class IntChromosome : AbstractChromosome<int>
     {
         /// <summary>
         /// Lower Limit of Gene
@@ -30,31 +30,6 @@ namespace Optimiser.GeneticAlgorithm
         int maxGene = int.MaxValue;
 
         /// <summary>
-        /// Indexer can be accessible to an each gene.
-        /// </summary>
-        /// <value></value>
-        public int this[int locus]{
-            get { return Genes[locus];}
-            set { this.Genes[locus] = value;}
-        }
-
-        /// <summary>
-        /// Array of Gene
-        /// </summary>
-        /// <value></value>
-        public int[] Genes{
-            get { return genes;}
-            set { this.genes = value;}
-        }
-        int[] genes;
-
-        /// <summary>
-        /// Gene's Length
-        /// </summary>
-        /// <value></value>
-        public int Length {get{return genes.Length;}}
-
-        /// <summary>
         /// RandCounter is used for generating a random seed.
         /// </summary>
         /// <value></value>
@@ -65,7 +40,7 @@ namespace Optimiser.GeneticAlgorithm
         /// </summary>
         /// <param name="gene"></param>
         /// <returns></returns>
-        public int GetAllele(int gene){
+        public override int GetAllele(int gene){
             var rand = new Random(DateTime.Now.GetHashCode() + RandCounter);
             var allele = gene;
             while (allele == gene)
