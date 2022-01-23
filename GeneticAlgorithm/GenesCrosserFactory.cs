@@ -46,5 +46,6 @@ namespace Optimiser.GeneticAlgorithm
             Rand = new Random(DateTime.Now.GetHashCode());
         }
 
+        
     }
 }
