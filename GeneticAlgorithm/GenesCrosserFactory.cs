@@ -36,7 +36,9 @@ namespace Optimiser.GeneticAlgorithm
             switch (selection)
             {
                 case CrossOverMethod.OnePoint: 
+                    return null;
                 case CrossOverMethod.TwoPoints:
+                    return CrossOverInTwoPoints;
                 case CrossOverMethod.Uniform: 
                 default:
                     return null;
