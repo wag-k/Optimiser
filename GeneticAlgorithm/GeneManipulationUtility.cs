@@ -15,7 +15,16 @@ namespace Optimiser.GeneticAlgorithm
         static GeneManipulationUtility(){
             Rand = new Random(DateTime.Now.GetHashCode());
         }
-
+        /// <summary>
+        /// Get a RandomLocus
+        /// </summary>
+        /// <param name="geneLength"></param>
+        /// <returns>locus< locus2</returns>
+        public static int GetRandomLocus(int geneLength){
+            var locus1 = Rand.Next(0, geneLength);
+            return locus1;
+        }
+    
         /// <summary>
         /// getRandomLocusPair
         /// </summary>
