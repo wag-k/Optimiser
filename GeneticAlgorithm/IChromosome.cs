@@ -8,7 +8,7 @@ namespace Optimiser.GeneticAlgorithm
     /// Interface of Chromosome
     /// </summary>
     /// <typeparam name="T">Genotype</typeparam>
-    public interface IChromosome<T>
+    public interface IChromosome<T> : ICloneable
     {
         /// <summary>
         /// Indexer can be accessible to an each gene.

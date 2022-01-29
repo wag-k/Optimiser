@@ -43,5 +43,7 @@ namespace Optimiser.GeneticAlgorithm
         }
 
         public abstract T GetAllele(T gene);
+
+        public abstract object Clone();
     }
 }

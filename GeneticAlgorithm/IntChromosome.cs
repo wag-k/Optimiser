@@ -7,7 +7,7 @@ namespace Optimiser.GeneticAlgorithm
     /// <summary>
     /// Chromosome of integer
     /// </summary>
-    public class IntChromosome : AbstractChromosome<int>
+    public class IntChromosome : AbstractChromosome<int>, IChromosome<int>
     {
         /// <summary>
         /// Lower Limit of Gene
@@ -56,6 +56,12 @@ namespace Optimiser.GeneticAlgorithm
                 allele = rand.Next(MinGene, MaxGene);
             }
             return allele;
+        }
+        public override object Clone(){
+            var cloneGenes = new int[this.Length];
+            Array.Copy(this.Genes, cloneGenes, this.Length);
+            var cloneFitness = this.Fitness;
+            return new IntChromosome(cloneGenes, cloneFitness);
         }
     }
 }
