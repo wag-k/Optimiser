@@ -75,5 +75,35 @@ namespace Optimiser.GeneticAlgorithm
             }
         }
 
+        /// <summary>
+        /// Chromosomal translocation
+        /// </summary>
+        /// <param name="targetChromosome"></param>
+        private static void MutateTranslocation(ref IChromosome<T> targetChromosome){
+            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetChromosome.Length);
+            var startLocus = selectedPair[0];
+            var targetGenes = new T[targetChromosome.Length];
+            Array.Copy(targetChromosome.Genes, targetGenes, targetGenes.Length);
+            var partialGenesLength = selectedPair[1] - startLocus + 1;
+            var partialGenes = (
+                from locus in Enumerable.Range(startLocus, partialGenesLength)
+                select targetGenes[locus]
+            );
+
+            // translocatedGenes will be translocated
+            var translocatedGenes = new List<T>(targetGenes);
+
+            // translocate
+            translocatedGenes.RemoveRange(startLocus, partialGenesLength);
+            var translocationPos = startLocus;
+            while (translocationPos == startLocus){
+                translocationPos = GeneManipulationUtility.GetRandomLocus(translocatedGenes.Count);
+            }
+            translocatedGenes.InsertRange(translocationPos, partialGenes);
+
+            targetChromosome.Genes = translocatedGenes.ToArray();
+        }
+
+
     }
 }
