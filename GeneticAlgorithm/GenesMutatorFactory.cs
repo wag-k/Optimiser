@@ -35,6 +35,7 @@ namespace Optimiser.GeneticAlgorithm
                 case Mutation.SingleLocus: 
                     return MutateSingleLocus;
                 case Mutation.Inversion:
+                    return MutateInversion;
                 case Mutation.Translocation: 
                 default:
                     return null;
