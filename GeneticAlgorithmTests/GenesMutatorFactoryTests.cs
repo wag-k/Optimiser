@@ -2,6 +2,7 @@
 using Optimiser.GeneticAlgorithm;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Optimiser.GeneticAlgorithm.Tests
@@ -96,6 +97,27 @@ namespace Optimiser.GeneticAlgorithm.Tests
             });
 
             TestVariousGeneLength(mutateInversion, checkMutationCnt);
+        }
+        
+        [TestMethod()]
+        public void MutateTranslocationTest()
+        {
+            var mutateTranslocation = GenesMutatorFactory<int>.Create(Mutation.Translocation);
+
+            /// <summary>
+            /// Translocaton must 
+            /// - happen once
+            /// - just translocate 
+            /// 
+            /// このテストは十分な検証ができていない。
+            /// </summary>
+            var checkTranslocation = new Action<IntChromosome, IntChromosome>((mutated, original)=>{
+                Assert.AreEqual(original.Length, mutated.Length);
+
+                Assert.IsFalse(mutated.Genes.SequenceEqual(original.Genes));
+            });
+
+            TestVariousGeneLength(mutateTranslocation, checkTranslocation);
         }
     }
 }

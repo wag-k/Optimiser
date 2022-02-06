@@ -37,6 +37,7 @@ namespace Optimiser.GeneticAlgorithm
                 case Mutation.Inversion:
                     return MutateInversion;
                 case Mutation.Translocation: 
+                    return MutateTranslocation;
                 default:
                     return null;
             }
@@ -80,7 +81,14 @@ namespace Optimiser.GeneticAlgorithm
         /// </summary>
         /// <param name="targetChromosome"></param>
         private static void MutateTranslocation(ref IChromosome<T> targetChromosome){
-            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetChromosome.Length);
+            if(targetChromosome.Length == 2){
+                // just swap
+                var tempGene = targetChromosome[0];
+                targetChromosome[0] = targetChromosome[1];
+                targetChromosome[1] = tempGene;
+                return;
+            }
+            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetChromosome.Length-1);
             var startLocus = selectedPair[0];
             var targetGenes = new T[targetChromosome.Length];
             Array.Copy(targetChromosome.Genes, targetGenes, targetGenes.Length);
@@ -97,7 +105,7 @@ namespace Optimiser.GeneticAlgorithm
             translocatedGenes.RemoveRange(startLocus, partialGenesLength);
             var translocationPos = startLocus;
             while (translocationPos == startLocus){
-                translocationPos = GeneManipulationUtility.GetRandomLocus(translocatedGenes.Count);
+                translocationPos = GeneManipulationUtility.GetRandomLocus(translocatedGenes.Count+1);
             }
             translocatedGenes.InsertRange(translocationPos, partialGenes);
 
