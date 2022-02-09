@@ -9,13 +9,33 @@ namespace Optimiser.GeneticAlgorithm
     [DataContract]
     public class GA<T>
     {
+        public Selection Selection {get; set;}
+        public CrossOverMethod CrossOverMethod {get; set;}
+
+        public int MutationRate{ get; set; }
         ChromosomeEnthumble<T> CurrentEnthumble { get; set;}
 
-        /**
-        public IEnumerable<T[]> GeneticManipulation(IList<IChromosome<T> enthumble){
-            
+        public List<T[]> GeneticManipulation(IList<IChromosome<T>> enthumble){
+            var nextGenerationEnthumble = new List<T[]>();
+            while(nextGenerationEnthumble.Count < enthumble.Count){
+                var selectedGenesPair = Select(enthumble, Selection);
+                var crossedGenesPair = CrossOver(
+                    new T[2][]{
+                        enthumble[selectedGenesPair[0]].Genes, 
+                        enthumble[selectedGenesPair[1]].Genes
+                    }, CrossOverMethod
+                );
+                // IChromosomeがInstance化できないので困った。
+                /**
+                for (int index = 0; index < crossedGenesPair.Length; ++index){
+                    var nextGenes = crossedGenesPair[index];
+                    Mutate(ref nextGenes, Mutation.SingleLocus);
+                }*/
+                nextGenerationEnthumble.Add(crossedGenesPair[0]);
+                nextGenerationEnthumble.Add(crossedGenesPair[1]);
+            }
+            return nextGenerationEnthumble;
         }
-        */
 
         public static int[] Select(IList<IChromosome<T>> chromosomes, Selection selection){
             var select = GenesSelectorFactory<T>.Create(selection);
