@@ -34,10 +34,11 @@ namespace Optimiser.GeneticAlgorithm
         /// <value></value>
         double Fitness {get;}
 
+        delegate T GetAllele(T gene);
         /// <summary>
         /// Get an allele
         /// </summary>
         /// <returns></returns>
-        T GetAllele(T gene);
+        GetAllele Allele{get;}
     }
 }

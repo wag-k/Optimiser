@@ -50,7 +50,35 @@ namespace Optimiser.GeneticAlgorithm.Tests
             for(int geneLength = 2; geneLength <= totalTestCnt; ++geneLength){
                 var chromosome = CreateSampleIntChrosome(geneLength, geneLength);
                 int gene = rand.Next();
-                Assert.IsFalse(gene == chromosome.GetAllele(gene));
+                Assert.IsFalse(gene == chromosome.Allele(gene));
+            }
+        }
+
+        [TestMethod()]
+        public void CloneTest(){
+            int totalTestCnt = 1000;
+            for(int geneLength = 2; geneLength <= totalTestCnt; ++geneLength){
+                var chromosome = CreateSampleIntChrosome(geneLength, geneLength);
+                var clonedChromosome = chromosome.Clone() as IntChromosome;
+                // Original And Clone will be same
+                Assert.IsTrue(chromosome.Genes.SequenceEqual(clonedChromosome.Genes));
+
+                // Clone genes changed
+                clonedChromosome[0] = clonedChromosome.Allele(clonedChromosome[0]);
+
+                // Original and Clone will be different
+                Assert.IsFalse(chromosome.Genes.SequenceEqual(clonedChromosome.Genes));
+                
+                Debug.Write("original: ");
+                foreach(var gene in chromosome.Genes){
+                    Debug.Write($"{gene},");
+                }
+                Debug.WriteLine("");
+                Debug.Write("clone: ");
+                foreach(var gene in clonedChromosome.Genes){
+                    Debug.Write($"{gene},");
+                }
+                Debug.WriteLine("");
             }
         }
     }

@@ -23,11 +23,12 @@ namespace Optimiser.GeneticAlgorithm
     public static class GenesMutatorFactory<T>
     {
         /// <summary>
-        /// delegate of mutate method
-        /// targetChromosome will be changed by mutation
+        /// delegate of mutate method.
         /// </summary>
-        /// <param name="targetchromosome"></param>
-        public delegate void Mutate(ref IChromosome<T> targetchromosome);
+        /// <param name="targetGenes"></param>
+        /// <param name="getAllele"></param>
+        /// <returns>mutatedGenes</returns>
+        public delegate T[] Mutate(T[] targetGenes, IChromosome<T>.GetAllele getAllele);
 
         public static Mutate Create(Mutation selection){
             switch (selection)
@@ -49,54 +50,55 @@ namespace Optimiser.GeneticAlgorithm
         /// <summary>
         /// Mutate at a single locus
         /// </summary>
-        /// <param name="targetChromosome"></param>
-        private static void MutateSingleLocus(ref IChromosome<T> targetChromosome){
-            var locus = GeneManipulationUtility.GetRandomLocus(targetChromosome.Length);
-            targetChromosome[locus] = targetChromosome.GetAllele(targetChromosome[locus]);
+        /// <param name="targetGenes"></param>
+        private static T[] MutateSingleLocus(T[] targetGenes, IChromosome<T>.GetAllele getAllele){
+            var mutatedGenes = GeneManipulationUtility.CopyGenes(targetGenes);
+            var locus = GeneManipulationUtility.GetRandomLocus(mutatedGenes.Length);
+            mutatedGenes[locus] = getAllele(mutatedGenes[locus]);
+            return mutatedGenes;
         }
 
         /// <summary>
         /// Chromosomal inversion
         /// Inverting the order of genes between two genes selected Randomly 
         /// </summary>
-        /// <param name="targetChromsome"></param>
-        private static void MutateInversion(ref IChromosome<T> targetChromsome){
-            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetChromsome.Length);
+        /// <param name="targetGenes"></param>
+        private static T[] MutateInversion(T[] targetGenes, IChromosome<T>.GetAllele getAllele){
+            var mutatedGenes = GeneManipulationUtility.CopyGenes(targetGenes);
+            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetGenes.Length);
             var startLocus = selectedPair[0];
             var partialGenesLength = selectedPair[1] - selectedPair[0] +1;
             var partialGenes = new T[partialGenesLength];
-            Array.Copy(targetChromsome.Genes, startLocus, partialGenes, 0, partialGenesLength);
+            Array.Copy(mutatedGenes, startLocus, partialGenes, 0, partialGenesLength);
 
             /// <summary>
             /// Invert
             /// </summary>
             /// <value></value>
             for (int locus = 0; locus < partialGenesLength; ++locus){
-                targetChromsome[startLocus + locus] = partialGenes[partialGenesLength - 1 - locus];
+                mutatedGenes[startLocus + locus] = partialGenes[partialGenesLength - 1 - locus];
             }
+            return mutatedGenes;
         }
 
         /// <summary>
         /// Chromosomal translocation
         /// </summary>
-        /// <param name="targetChromosome"></param>
-        private static void MutateTranslocation(ref IChromosome<T> targetChromosome){
-            if(targetChromosome.Length == 2){
+        /// <param name="targetGenes"></param>
+        private static T[] MutateTranslocation(T[] targetGenes, IChromosome<T>.GetAllele getAllele){
+            if(targetGenes.Length == 2){
                 // just swap
-                var tempGene = targetChromosome[0];
-                targetChromosome[0] = targetChromosome[1];
-                targetChromosome[1] = tempGene;
-                return;
+                var mutatedGenes = GeneManipulationUtility.CopyGenes(targetGenes);
+                var tempGene = mutatedGenes[0];
+                mutatedGenes[0] = mutatedGenes[1];
+                mutatedGenes[1] = tempGene;
+                return mutatedGenes;
             }
-            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetChromosome.Length-1);
+            var selectedPair = GeneManipulationUtility.GetRandomLocusPair(targetGenes.Length-1);
             var startLocus = selectedPair[0];
-            var targetGenes = new T[targetChromosome.Length];
-            Array.Copy(targetChromosome.Genes, targetGenes, targetGenes.Length);
             var partialGenesLength = selectedPair[1] - startLocus + 1;
-            var partialGenes = (
-                from locus in Enumerable.Range(startLocus, partialGenesLength)
-                select targetGenes[locus]
-            );
+            var partialGenes = new T[partialGenesLength];
+            Array.Copy(targetGenes, startLocus, partialGenes, 0, partialGenesLength);
 
             // translocatedGenes will be translocated
             var translocatedGenes = new List<T>(targetGenes);
@@ -109,7 +111,7 @@ namespace Optimiser.GeneticAlgorithm
             }
             translocatedGenes.InsertRange(translocationPos, partialGenes);
 
-            targetChromosome.Genes = translocatedGenes.ToArray();
+            return translocatedGenes.ToArray();
         }
 
 

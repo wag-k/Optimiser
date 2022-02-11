@@ -25,12 +25,10 @@ namespace Optimiser.GeneticAlgorithm
                         enthumble[selectedGenesPair[1]].Genes
                     }, CrossOverMethod
                 );
-                // IChromosomeがInstance化できないので困った。
-                /**
                 for (int index = 0; index < crossedGenesPair.Length; ++index){
                     var nextGenes = crossedGenesPair[index];
-                    Mutate(ref nextGenes, Mutation.SingleLocus);
-                }*/
+                    Mutate(nextGenes, enthumble[index].Allele, Mutation.SingleLocus);
+                }
                 nextGenerationEnthumble.Add(crossedGenesPair[0]);
                 nextGenerationEnthumble.Add(crossedGenesPair[1]);
             }
@@ -48,9 +46,9 @@ namespace Optimiser.GeneticAlgorithm
             return crossOver(originalGenesPair);
         }
 
-        public static void Mutate(ref IChromosome<T> chromosome, Mutation mutation){
+        public static void Mutate(T[] genes, IChromosome<T>.GetAllele getAllele, Mutation mutation){
             var mutate = GenesMutatorFactory<T>.Create(mutation);
-            mutate(ref chromosome);
+            mutate(genes, getAllele);
         }
 
     }

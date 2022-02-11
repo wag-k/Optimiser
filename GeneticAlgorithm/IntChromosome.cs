@@ -29,6 +29,9 @@ namespace Optimiser.GeneticAlgorithm
         }
         int maxGene = int.MaxValue;
 
+        public override IChromosome<int>.GetAllele Allele{
+            get {return this.IntChromosomeAllele;}
+        }
         /// <summary>
         /// RandCounter is used for generating a random seed.
         /// </summary>
@@ -48,7 +51,7 @@ namespace Optimiser.GeneticAlgorithm
         /// </summary>
         /// <param name="gene"></param>
         /// <returns></returns>
-        public override int GetAllele(int gene){
+        private int IntChromosomeAllele(int gene){
             var rand = new Random(DateTime.Now.GetHashCode() + RandCounter);
             var allele = gene;
             while (allele == gene)

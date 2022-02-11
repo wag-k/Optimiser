@@ -2,6 +2,7 @@
 using Optimiser.GeneticAlgorithm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -15,14 +16,14 @@ namespace Optimiser.GeneticAlgorithm.Tests
         /// </summary>
         /// <param name="mutate"></param>
         /// <param name="assertFunc">mutatedChromosome, originalChromosome</param>
-        static void TestVariousGeneLength(GenesMutatorFactory<int>.Mutate mutate, Action<IntChromosome, IntChromosome> assertFunc){
+        static void TestVariousGeneLength(GenesMutatorFactory<int>.Mutate mutate, Action<int[], int[]> assertFunc){
             int maxGeneLength = 1000;
             for (int geneLength = 2; geneLength < maxGeneLength; ++geneLength){
                 var chromosome = IntChromosomeTests.CreateSampleIntChrosome(geneLength, 0);
                 var originalChromosome = chromosome.Clone() as IntChromosome;
-                mutate(ref chromosome);
-                
-                assertFunc(chromosome as IntChromosome, originalChromosome);
+                var mutaedGenes = mutate(chromosome.Genes, chromosome.Allele);
+                Assert.IsTrue(originalChromosome.Genes.SequenceEqual(chromosome.Genes));
+                assertFunc(mutaedGenes, originalChromosome.Genes);
             }
         }
 
@@ -41,7 +42,7 @@ namespace Optimiser.GeneticAlgorithm.Tests
             /// <summary>
             /// Mutation must be happened once
             /// </summary>
-            var checkMutationCnt = new Action<IntChromosome, IntChromosome>((mutated, original)=>{
+            var checkMutationCnt = new Action<int[], int[]>((mutated, original)=>{
                 int totalMutateCnt = 0;
                 for(int locus = 0; locus < original.Length; ++locus){
                     if (mutated[locus] != original[locus]){
@@ -62,7 +63,7 @@ namespace Optimiser.GeneticAlgorithm.Tests
             /// <summary>
             /// Inversion must be happened once
             /// </summary>
-            var checkMutationCnt = new Action<IntChromosome, IntChromosome>((mutated, original)=>{
+            var checkMutationCnt = new Action<int[], int[]>((mutated, original)=>{
                 Assert.AreEqual(original.Length, mutated.Length);
                 
                 int totalMutateCnt = 0;
@@ -111,10 +112,21 @@ namespace Optimiser.GeneticAlgorithm.Tests
             /// 
             /// このテストは十分な検証ができていない。
             /// </summary>
-            var checkTranslocation = new Action<IntChromosome, IntChromosome>((mutated, original)=>{
+            var checkTranslocation = new Action<int[], int[]>((mutated, original)=>{
                 Assert.AreEqual(original.Length, mutated.Length);
-
-                Assert.IsFalse(mutated.Genes.SequenceEqual(original.Genes));
+                /*
+                Debug.Write("original: ");
+                foreach(var gene in original){
+                    Debug.Write($"{gene},");
+                }
+                Debug.WriteLine("");
+                Debug.Write("muta: ");
+                foreach(var gene in mutated){
+                    Debug.Write($"{gene},");
+                }
+                Debug.WriteLine("");
+                */
+                Assert.IsFalse(mutated.SequenceEqual(original));
             });
 
             TestVariousGeneLength(mutateTranslocation, checkTranslocation);

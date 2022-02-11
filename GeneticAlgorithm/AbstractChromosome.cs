@@ -42,7 +42,7 @@ namespace Optimiser.GeneticAlgorithm
             Fitness = fitness;
         }
 
-        public abstract T GetAllele(T gene);
+        public abstract IChromosome<T>.GetAllele Allele{get;}
 
         public abstract object Clone();
     }

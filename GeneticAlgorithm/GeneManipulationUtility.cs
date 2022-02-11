@@ -42,5 +42,17 @@ namespace Optimiser.GeneticAlgorithm
             var sortedPair = locus1<locus2 ? new int[2]{locus1, locus2} : new int[2]{locus2 , locus1};
             return sortedPair;
         }
+
+        /// <summary>
+        /// CopyGenes
+        /// </summary>
+        /// <param name="original"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>copiedGenes</returns>
+        public static T[] CopyGenes<T>(T[] original){
+            var copied = new T[original.Length];
+            Array.Copy(original, copied, original.Length);
+            return copied;
+        }
     }
 }
