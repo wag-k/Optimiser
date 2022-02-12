@@ -9,9 +9,15 @@ namespace Optimiser.GeneticAlgorithm
     [DataContract]
     public class GA<T>
     {
+        public int EnthumbleSize {get; set;}
         public Selection Selection {get; set;}
         public CrossOverMethod CrossOverMethod {get; set;}
 
+        /// <summary>
+        /// MutationRate of single locus
+        /// </summary>
+        /// <value>0 to 1</value>
+        [DataMember (Name = "SingleMutationRate")] 
         public double SingleMutationRate{ 
             get {return singleMutationRate;}
             set {
@@ -23,6 +29,12 @@ namespace Optimiser.GeneticAlgorithm
             }
         }
         double singleMutationRate;
+
+        /// <summary>
+        /// MutationRate of inversion
+        /// </summary>
+        /// <value>0 to 1</value>
+        [DataMember (Name = "InversingMutationRate")]
         public double InversingMutationRate{ 
             get {return inversingMutationRate;}
             set {
@@ -34,6 +46,12 @@ namespace Optimiser.GeneticAlgorithm
             }
         }
         double inversingMutationRate;
+
+        /// <summary>
+        /// MutationRate of translocation
+        /// </summary>
+        /// <value>0 to 1</value>
+        [DataMember (Name = "TranslocatingMutationRate")]
         public double TranslocatingMutationRate{ 
             get {return translocatingMutationRate;}
             set {
@@ -45,13 +63,27 @@ namespace Optimiser.GeneticAlgorithm
             }
         }
         double translocatingMutationRate;
+
+        /// <summary>
+        /// Current chromosome enthumble
+        /// </summary>
+        /// <value></value>
         ChromosomeEnthumble<T> CurrentEnthumble { get; set;}
 
+        /// <summary>
+        /// Rand
+        /// </summary>
+        /// <value></value>
         static Random Rand{
             get {return rand;} 
         }
         static Random rand = new Random();
 
+        /// <summary>
+        /// Execute Genetic manipulation
+        /// </summary>
+        /// <param name="enthumble">Current Generation Enthumble</param>
+        /// <returns>nextGenerationEnthumble</returns>
         public List<T[]> GeneticManipulation(IList<IChromosome<T>> enthumble){
             var nextGenerationEnthumble = new List<T[]>();
             while(nextGenerationEnthumble.Count < enthumble.Count){
