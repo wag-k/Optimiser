@@ -29,7 +29,7 @@ namespace Optimiser.GeneticAlgorithm
                 if(0 <= inversingMutationRate && inversingMutationRate <= 1){
                     inversingMutationRate = value;
                 }else{
-                    throw new ArgumentException($"{nameof(SingleMutationRate)} must be 0 <= rate <= 1");
+                    throw new ArgumentException($"{nameof(InversingMutationRate)} must be 0 <= rate <= 1");
                 }
             }
         }
@@ -40,7 +40,7 @@ namespace Optimiser.GeneticAlgorithm
                 if(0 <= translocatingMutationRate && translocatingMutationRate <= 1){
                     translocatingMutationRate = value;
                 }else{
-                    throw new ArgumentException($"{nameof(SingleMutationRate)} must be 0 <= rate <= 1");
+                    throw new ArgumentException($"{nameof(TranslocatingMutationRate)} must be 0 <= rate <= 1");
                 }
             }
         }
