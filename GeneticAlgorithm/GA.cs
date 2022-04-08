@@ -19,16 +19,16 @@ namespace Optimiser.GeneticAlgorithm
         /// <value>0 to 1</value>
         [DataMember (Name = "SingleMutationRate")] 
         public double SingleMutationRate{ 
-            get {return singleMutationRate;}
+            get {return _singleMutationRate;}
             set {
-                if(0 <= singleMutationRate && singleMutationRate <= 1){
-                    singleMutationRate = value;
+                if(0 <= _singleMutationRate && _singleMutationRate <= 1){
+                    _singleMutationRate = value;
                 }else{
                     throw new ArgumentException($"{nameof(SingleMutationRate)} must be 0 <= rate <= 1");
                 }
             }
         }
-        double singleMutationRate;
+        double _singleMutationRate;
 
         /// <summary>
         /// MutationRate of inversion
@@ -36,16 +36,16 @@ namespace Optimiser.GeneticAlgorithm
         /// <value>0 to 1</value>
         [DataMember (Name = "InversingMutationRate")]
         public double InversingMutationRate{ 
-            get {return inversingMutationRate;}
+            get {return _inversingMutationRate;}
             set {
-                if(0 <= inversingMutationRate && inversingMutationRate <= 1){
-                    inversingMutationRate = value;
+                if(0 <= _inversingMutationRate && _inversingMutationRate <= 1){
+                    _inversingMutationRate = value;
                 }else{
                     throw new ArgumentException($"{nameof(InversingMutationRate)} must be 0 <= rate <= 1");
                 }
             }
         }
-        double inversingMutationRate;
+        double _inversingMutationRate;
 
         /// <summary>
         /// MutationRate of translocation
@@ -53,16 +53,16 @@ namespace Optimiser.GeneticAlgorithm
         /// <value>0 to 1</value>
         [DataMember (Name = "TranslocatingMutationRate")]
         public double TranslocatingMutationRate{ 
-            get {return translocatingMutationRate;}
+            get {return _translocatingMutationRate;}
             set {
-                if(0 <= translocatingMutationRate && translocatingMutationRate <= 1){
-                    translocatingMutationRate = value;
+                if(0 <= _translocatingMutationRate && _translocatingMutationRate <= 1){
+                    _translocatingMutationRate = value;
                 }else{
                     throw new ArgumentException($"{nameof(TranslocatingMutationRate)} must be 0 <= rate <= 1");
                 }
             }
         }
-        double translocatingMutationRate;
+        double _translocatingMutationRate;
 
         /// <summary>
         /// Current chromosome enthumble
@@ -75,9 +75,9 @@ namespace Optimiser.GeneticAlgorithm
         /// </summary>
         /// <value></value>
         static Random Rand{
-            get {return rand;} 
+            get {return _rand;} 
         }
-        static Random rand = new Random();
+        static Random _rand = new Random();
 
         /// <summary>
         /// Execute Genetic manipulation
@@ -111,17 +111,36 @@ namespace Optimiser.GeneticAlgorithm
             return nextGenerationEnthumble;
         }
 
+        /// <summary>
+        /// Select Genes Pair 
+        /// </summary>
+        /// <param name="chromosomes"></param>
+        /// <param name="selection"></param>
+        /// <returns>Selected Chromosome Index Pair</returns>
         public static int[] Select(IList<IChromosome<T>> chromosomes, Selection selection){
             var select = GenesSelectorFactory<T>.Create(selection);
             var selectedGenesPair = select(chromosomes);
             return selectedGenesPair;
         } 
 
+        /// <summary>
+        /// Cross Over And Generate new Genes Pair
+        /// </summary>
+        /// <param name="originalGenesPair"></param>
+        /// <param name="crossOverMethod"></param>
+        /// <returns></returns>
         public static T[][] CrossOver(T[][] originalGenesPair, CrossOverMethod crossOverMethod){
             var crossOver = GenesCrosserFactory<T>.Create(crossOverMethod);
             return crossOver(originalGenesPair);
         }
 
+        /// <summary>
+        /// Mutate Genes
+        /// </summary>
+        /// <param name="genes"></param>
+        /// <param name="getAllele"></param>
+        /// <param name="mutation"></param>
+        /// <returns></returns>
         public static T[] Mutate(T[] genes, IChromosome<T>.GetAllele getAllele, Mutation mutation){
             var mutate = GenesMutatorFactory<T>.Create(mutation);
             return mutate(genes , getAllele);
