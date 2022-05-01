@@ -9,6 +9,21 @@ namespace Optimiser.GeneticAlgorithm
     [DataContract]
     public class GA<T>
     {
+        public GA()
+        {
+        }
+
+        public GA(CreateRandomChromosomeMethod createRandomChromosomeMethod)
+        {
+            CreateRandomChromosome = createRandomChromosomeMethod;
+        }
+
+        /// <summary>
+        /// Delegate of creating random chromosome method
+        /// </summary>
+        /// <returns></returns>
+        public delegate IChromosome<T> CreateRandomChromosomeMethod();
+
         public int EnthumbleSize {get; set;}
         public Selection Selection {get; set;}
         public CrossOverMethod CrossOverMethod {get; set;}
@@ -28,7 +43,7 @@ namespace Optimiser.GeneticAlgorithm
                 }
             }
         }
-        double _singleMutationRate;
+        double _singleMutationRate = 0.3;
 
         /// <summary>
         /// MutationRate of inversion
@@ -45,7 +60,7 @@ namespace Optimiser.GeneticAlgorithm
                 }
             }
         }
-        double _inversingMutationRate;
+        double _inversingMutationRate = 0.3;
 
         /// <summary>
         /// MutationRate of translocation
@@ -62,7 +77,13 @@ namespace Optimiser.GeneticAlgorithm
                 }
             }
         }
-        double _translocatingMutationRate;
+        double _translocatingMutationRate = 0.3;
+
+        /// <summary>
+        /// This property will be set at .ctor
+        /// </summary>
+        /// <value></value>
+        public CreateRandomChromosomeMethod CreateRandomChromosome { get; private set;}
 
         /// <summary>
         /// Current chromosome enthumble
@@ -110,6 +131,21 @@ namespace Optimiser.GeneticAlgorithm
             }
             return nextGenerationEnthumble;
         }
+
+        public ChromosomeEnthumble<T> CreateInitialEnthumble()
+        {
+            var chromosomes = new IChromosome<T>[EnthumbleSize];
+            for(int chromosomeIndex = 0; chromosomeIndex < EnthumbleSize; ++chromosomeIndex)
+            {
+                chromosomes[chromosomeIndex] = CreateRandomChromosome();
+            }
+            var enthumble = new ChromosomeEnthumble<T>
+            {
+                Generation = 0,
+                Chromosomes = chromosomes,
+            };
+            return enthumble;
+        } 
 
         /// <summary>
         /// Select Genes Pair 

@@ -13,9 +13,9 @@ namespace Optimiser.GeneticAlgorithm
     public class ChromosomeEnthumble<T>
     {
         [DataMember (Name = "Generation")]
-        int Generation {get; set; }
+        public int Generation {get; set; }
         
         [DataMember (Name = "Chromosomes")]
-        IList<IChromosome<T>> Chromosomes { get; set;}
+        public IList<IChromosome<T>> Chromosomes { get; set;}
     }
 }
